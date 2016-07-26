@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./css/normalize.css">
+	<style>
+		#container {
+			background-color: #eeeeee;
+		}
+
+		path {
+			fill: none;
+			stroke: steelblue;
+			stroke-width: 1;
+		}
+
+		.domain,
+		.tick line {
+			stroke: gray;
+			stroke-width: 1;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script src="./d3/d3.v3.min.js"></script>
+<script>
+	var data = [9, 5, 10, 4, 10, 4, 1, 5, 2, 1];
+	var bar_width = 50;
+	var bar_padding = 10;
+	var svg_width = (bar_width + bar_padding) * data.length;
+	var svg_height = 500;
+
+	// 缩放函数
+	var scale = d3.scale.linear().domain([0, d3.max(data)]).range([svg_height, 0]);
+
+	var svg = d3.select("#container").append("svg").attr({"width": svg_width, "height": svg_height});
+	/**
+	 * data：绑定数据，绑定之后可以直接使用比如attr({"width": function (d) {return d;}
+	 * enter：
+	 * g元素之前没添加时为什么：
+	 */
+	var bar = svg.selectAll("g").data(data).enter().append("g").attr("transform", function (d, i) {
+		return "translate(" + i * (bar_width + bar_padding) + ",0)";
+	});
+
+	bar.append("rect").attr({
+		"y": function (d) {
+			return scale(d);
+		}, "width": bar_width,
+		"height": function (d) {
+			return svg_height - scale(d)
+		}
+	}).style("fill", "#09f");
+	bar.append("text").text(function (d) {
+		return d;
+	}).attr({
+		"y": function (d) {
+			return scale(d)
+		},
+		"x": bar_width / 2,
+		"dy": 15,
+		"text-anchor": "end"
+	});
+
+
+</script>
+</body>
+</html>
