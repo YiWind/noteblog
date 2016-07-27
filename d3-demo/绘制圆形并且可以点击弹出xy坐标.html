@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./css/normalize.css">
+	<style>
+		#container {
+			width: 500px;
+			height: 500px;
+			background-color: #eeeeee;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script src="./d3/d3.v4.min.js"></script>
+<script>
+	var data = [10, 10, 10, 10, 10, 10, 10, 10];
+	var svg = d3.select("#container").append("svg").attr("width", 500).attr("height", 500);
+	var circle = svg.selectAll("circle").data(data).enter().append("circle");
+	circle.attr("cx", function (d, i) {
+		return (i * 50) + d;
+	}).attr("cy", 500 / 2).attr("r", function (d) {
+		return d;
+	}).on("click", function () {
+		var x = this.getAttribute("cx");
+		var y = this.getAttribute("cy");
+		alert("x轴坐标为：" + x + "。y轴坐标为：" + y);
+	});
+</script>
+</body>
+</html>

@@ -58,13 +58,12 @@
 				return d;
 			})
 			.attr("x", function (d, i) {
-				return i * (width / dataset.length) + (width / dataset.length - barPadding) / 2;
+				return i * (width / dataset.length) + (width / dataset.length - barPadding) / 2 - this.clientWidth / 2;
 			})
 			.attr("y", function (d) {
 				return height - d * 4;
 			})
 			.attr("fill", "#fff")
-			.attr("text-anchor", "middle");
 </script>
 </body>
 </html>

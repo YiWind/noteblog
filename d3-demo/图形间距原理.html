@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./css/normalize.css">
+	<style>
+		#container {
+			/*width: 500px;*/
+			/*height: 500px;*/
+			background-color: #eeeeee;
+		}
+
+		.bar {
+			display: inline-block;
+			width: 20px;
+			height: 75px;
+			background-color: teal;
+			margin-right: 2px;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script src="./d3/d3.v4.min.js"></script>
+<script>
+	var dataset = [25, 7, 5, 26, 11, 25, 7, 5, 26];
+	var w = 500;
+	var h = 500;
+	var barPadding = 10; // 设置图形间的间距
+	var svg = d3.select("#container")
+			.append("svg")
+			.attr("width", w)
+			.attr("height", h);
+
+	svg.selectAll("rect")
+			.data(dataset)
+			.enter()
+			.append("rect")
+			.attr("y", h / 2 - 100 / 2)
+			.attr("width", w / dataset.length - barPadding)
+			.attr("height", 100)
+			.attr("x", function (d, i) {
+				console.log(i * (w / dataset.length))
+				return i * (w / dataset.length);
+			});
+</script>
+</body>
+</html>
