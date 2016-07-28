@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../css/normalize.css"/>
+	<script src="../d3/d3.v3.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script>
+	var w = 500;
+	var h = 500;
+	var radius = 20;
+	var dataset = [
+		[5, 20, radius],
+		[480, 90, radius],
+		[250, 50, radius],
+		[100, 33, radius],
+		[330, 95, radius],
+		[410, 12, radius],
+		[475, 44, radius],
+		[25, 67, radius],
+		[85, 21, radius],
+		[220, 88, radius]
+	];
+	// x、y等比缩放
+	var xScale = d3.scale.linear()
+			.domain([0, d3.max(dataset, function (d) {
+				return d[0]; // 获取最大值
+			})])
+			.range([0, w]); // 把最大值缩放到range的最大值
+
+	var yScale = d3.scale.linear()
+			.domain([0, d3.max(dataset, function (d) {
+				return d[1];
+			})])
+			.range([0, h]);
+
+	var svg = d3.select("#container")
+			.append("svg")
+			.attr("width", w)
+			.attr("height", h);
+
+	svg.selectAll("circle")
+			.data(dataset)
+			.enter()
+			.append("circle")
+			.attr("cx", function (d) {
+				return xScale(d[0]);
+			})
+			.attr("cy", function (d) {
+				return yScale(d[1]);
+			})
+			.attr("r", function (d) {
+				return d[2];
+			});
+
+	svg.selectAll("text")
+			.data(dataset)
+			.enter()
+			.append("text")
+			.text(function (d) {
+				return d[0] + "," + d[1];
+			})
+			.attr("x", function (d) {
+				return xScale(d[0]);
+			})
+			.attr("y", function (d) {
+				return yScale(d[1]);
+			})
+			.attr("font-size", "12px")
+			.attr("fill", "red")
+			.attr("text-anchor", "middle");
+</script>
+</body>
+</html>

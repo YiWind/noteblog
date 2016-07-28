@@ -1,82 +1,75 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
-	<link rel="stylesheet" href="./css/normalize.css">
-	<style>
-		#container {
-			/*width: 200px;*/
-			/*height: 500px;*/
-			/*overflow-y: auto;*/
-			font-size: 0;
-			background-color: #eeeeee;
-		}
-
-	</style>
+	<link rel="stylesheet" href="./css/normalize.css"/>
+	<script src="./d3/d3.v4.min.js"></script>
 </head>
 <body>
 <div id="container"></div>
-<script src="./d3/d3.v4.min.js"></script>
 <script>
-	var w = 500;
-	var h = 500;
-	var dataset = [
-		[5, 20],
-		[480, 90],
-		[250, 50],
-		[100, 33],
-		[330, 95],
-		[410, 12],
-		[475, 44],
-		[25, 67],
-		[85, 21],
-		[220, 88]
-	];
-	var xScale = d3.scaleLinear()
-			.domain([0, d3.max(dataset, function (d) {
-				return d[0];
-			})]) // x轴可显示区域
-			.range([0, w]);
-	var yScale = d3.scaleLinear()
-			.domain([0, d3.max(dataset, function (d) {
-				return d[1];
-			})]) // y轴可显示区域
-			.range([0, h]);
+	var width, height;
+	width = 500;
+	height = 250;
+	var margin = {
+		"left": 50,
+		"top": 30,
+		"right": 20,
+		"bottom": 20
+	};
+	var g_width = width - margin.left - margin.right;
+	var g_height = height - margin.top - margin.bottom;
+
+	var data = [1, 2, 6, 7, 9, 4, 7, 9, 1];
+	// 设置缩放
+	var scale_x = d3.scaleLinear()
+			.domain([0, data.length - 1])
+			.range([0, g_width]); // domain 输入范围是data的长度，range输出范围是
+	var scale_y = d3.scaleLinear()
+			.domain([0, d3.max(data)])
+			.range([g_height, 0]);
+
+	// 绘制缩放
+	var line_generator = d3.line()
+			.x(function (d, i) {
+				return scale_x(i);
+			})
+			.y(function (d) {
+				return scale_y(d);
+			}).curve(d3.curveCatmullRom.alpha(0.1));
+	//			.interpolate("cardinal"); // interpolate("cardinal") 设置曲线
+
 	var svg = d3.select("#container")
 			.append("svg")
-			.attr("width", w)
-			.attr("height", h);
+			.attr("width", width)
+			.attr("height", height);
 
-	var circle = svg.selectAll("circle")
-			.data(dataset)
-			.enter()
-			.append("circle")
-			.attr("cx", function (d) {
-				return xScale(d[0]); // 把x轴坐标定位到缩放的位置
-			})
-			.attr("cy", function (d) {
-				return yScale(d[1]); // 把y轴坐标定位到缩放的位置
-			})
-			.attr("r", function (d) {
-				return Math.sqrt(d[1]);
-			});
-	var text = svg.selectAll("text")
-			.data(dataset)
-			.enter()
+	var x_axis = d3.axisBottom()
+			.scale(scale_x);
+
+	var y_axis = d3.axisLeft()
+			.scale(scale_y);
+
+	var g = svg.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	g.append("g")
+			.call(x_axis)
+			.attr("transform", "translate(0," + g_height + ")");
+
+	g.append("g")
+			.call(y_axis)
 			.append("text")
-			.attr("x", function (d) {
-				return xScale(d[0]);
-			})
-			.attr("y", function (d) {
-				return yScale(d[1]);
-			})
-			.text(function (d) {
-				return d[0] + ',' + d[1];
-			})
-			.attr("font-size", 12)
-			.attr("fill", "red")
-			.attr("text-anchor","middle");
+			.text("价格(元)")
+			.attr("transform", "rotate(-90)")
+			.attr("text-anchor", "end")
+			.attr("dy", "1em");
+
+	var path = g.append("path")
+			.attr("d", line_generator(data));
+
+
 </script>
 </body>
 </html>

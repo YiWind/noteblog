@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./css/normalize.css"/>
+	<script src="../d3/d3.v3.min.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<script>
+	var dataset = [100, 200, 300, 400, 500];
+	var scale = d3.scale.linear();
+	scale.domain([0, 500]);
+	scale.range([0, 250]);
+	
+	alert(scale(100)); // 50
+	alert(scale(200)); // 100
+	alert(scale(300)); // 150
+</script>
+</body>
+</html>
